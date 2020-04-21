@@ -30,8 +30,10 @@ RUN \
     && ln -s /usr/local/openresty/nginx/sbin/nginx /usr/local/bin/nginx \
     # Install Dependencies
     && cd /tmp \
-    && wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    && rpm -ivh epel-release-latest-7.noarch.rpm \
+    # && wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    # && rpm -ivh epel-release-latest-7.noarch.rpm \
+    && rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    # && yum install -y epel-release \
     && yum install -y yum-utils \
     && yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo \
     && yum install -y openresty openresty-resty curl git automake autoconf \
