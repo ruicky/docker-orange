@@ -22,23 +22,17 @@ ADD docker-entrypoint.sh docker-entrypoint.sh
 RUN \
     chmod 755 docker-entrypoint.sh \
     && mv docker-entrypoint.sh /usr/local/bin \
-
-    && yum-config-manager --add-repo https://openresty.org/yum/cn/centos/OpenResty.repo \
-    && yum install -y epel-release \
-    && yum install -y dnsmasq openresty openresty-resty make telnet wget \
-    && yum clean all \
-    && ln -s /usr/local/openresty/nginx/sbin/nginx /usr/local/bin/nginx \
     # Install Dependencies
     && cd /tmp \
-    # && wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    # && rpm -ivh epel-release-latest-7.noarch.rpm \
-    && rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    # && yum install -y epel-release \
-    && yum install -y yum-utils \
+    && yum install -y yum-utils wget \
+    && wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    && rpm -ivh epel-release-latest-7.noarch.rpm \
     && yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo \
-    && yum install -y openresty openresty-resty curl git automake autoconf \
+    && yum install -y dnsmasq openresty openresty-resty curl git automake autoconf make telnet \
     && yum install -y gcc pcre-devel openssl-devel libtool gcc-c++ luarocks cmake3 lua-devel \
+    && yum clean all \
     && ln -s /usr/bin/cmake3 /usr/bin/cmake \
+    && ln -s /usr/local/openresty/nginx/sbin/nginx /usr/local/bin/nginx \
     # Install lor
     && cd /tmp \
     && curl -fSL https://github.com/sumory/lor/archive/v${LOR_VERSION}.tar.gz -o lor.tar.gz \
@@ -51,10 +45,10 @@ RUN \
     && tar zxf orange.tar.gz \
     && cd orange-${ORANGE_VERSION} \
     && make install \
-
+    # clean tmp
     && cd / \
     && rm -rf /tmp/* \
-
+    # change dnsmasq
     && echo "user=root" > /etc/dnsmasq.conf \
     && echo 'domain-needed' >> /etc/dnsmasq.conf \
     && echo 'listen-address=127.0.0.1' >> /etc/dnsmasq.conf \
@@ -64,7 +58,7 @@ RUN \
     && echo 'INTERNAL_DNS' >> /etc/resolv.dnsmasq.conf \
     && echo 'nameserver 8.8.8.8' >> /etc/resolv.dnsmasq.conf \
     && echo 'nameserver 8.8.4.4' >> /etc/resolv.dnsmasq.conf \
-
+    # add user
     && useradd www \
     && echo "www:www" | chpasswd \
     && echo "www   ALL=(ALL)       ALL" >> /etc/sudoers \
