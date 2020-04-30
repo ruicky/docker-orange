@@ -24,24 +24,23 @@ RUN \
     && mv docker-entrypoint.sh /usr/local/bin \
     # Install Dependencies
     && cd /tmp \
-    && yum install -y yum-utils wget \
+    && yum install -y wget \
     && wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     && rpm -ivh epel-release-latest-7.noarch.rpm \
+    && yum install -y yum-utils \
     && yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo \
-    && yum install -y dnsmasq openresty openresty-resty curl git automake autoconf make telnet \
+    && yum install -y openresty openresty-resty curl git automake autoconf \
     && yum install -y gcc pcre-devel openssl-devel libtool gcc-c++ luarocks cmake3 lua-devel \
-    && yum clean all \
     && ln -s /usr/bin/cmake3 /usr/bin/cmake \
-    && ln -s /usr/local/openresty/nginx/sbin/nginx /usr/local/bin/nginx \
     # Install lor
     && cd /tmp \
     && curl -fSL https://github.com/sumory/lor/archive/v${LOR_VERSION}.tar.gz -o lor.tar.gz \
     && tar zxf lor.tar.gz \
-    && cd /tmp/lor-${LOR_VERSION} \
+    && cd lor-${LOR_VERSION} \
     && make install \
     # Install orange
     && cd /tmp \
-    && curl -fSL https://github.com/sumory/orange/archive/v${ORANGE_VERSION}.tar.gz -o orange.tar.gz \
+    && curl -fSL https://github.com/orlabs/orange/archive/v${ORANGE_VERSION}.tar.gz -o orange.tar.gz \
     && tar zxf orange.tar.gz \
     && cd orange-${ORANGE_VERSION} \
     && make install \
