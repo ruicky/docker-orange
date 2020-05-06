@@ -30,7 +30,7 @@ RUN \
     && yum install -y yum-utils \
     && yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo \
     && yum install -y openresty openresty-resty curl git automake autoconf \
-    && yum install -y gcc pcre-devel openssl-devel libtool gcc-c++ luarocks cmake3 lua-devel make telnet dnsmasq \
+    && yum install -y gcc pcre-devel openssl-devel libtool gcc-c++ luarocks cmake3 lua-devel make telnet dnsmasq which \
     && ln -s /usr/bin/cmake3 /usr/bin/cmake \
     # Install lor
     && cd /tmp \
@@ -42,8 +42,8 @@ RUN \
     && cd /tmp \
     && curl -fSL https://github.com/orlabs/orange/archive/v${ORANGE_VERSION}.tar.gz -o orange.tar.gz \
     && tar zxf orange.tar.gz \
-    && cd orange-${ORANGE_VERSION} \
-    && make install \
+    && cd orange-${ORANGE_VERSION}/install \
+    && sh install-orange.sh \
     # clean tmp
     && cd / \
     && rm -rf /tmp/* \
